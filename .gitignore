@@ -1,0 +1,33 @@
+# Ambiente virtual Python
+.venv/
+venv/
+env/
+
+# Cache e banco de dados local
+*.db
+*.db-shm
+*.db-wal
+
+# Bytecode Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Variáveis de ambiente (não versionar .env com segredos)
+# .env  ← mantemos o .env padrão versionado pois não tem segredos
+
+# Arquivos de distribuição
+dist/
+build/
+*.egg-info/
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+
+# Logs
+*.log
+
+# macOS
+.DS_Store
