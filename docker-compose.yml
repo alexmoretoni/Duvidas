@@ -1,0 +1,46 @@
+version: "3.9"
+
+services:
+  api:
+    build: .
+    container_name: trending-recommender
+    ports:
+      - "8000:8000"
+    volumes:
+      # Persiste o banco de dados SQLite entre reinicializações
+      - ./data:/app/data
+    environment:
+      - DEFAULT_COUNTRY=BR
+      - DEFAULT_LANGUAGE=pt
+      - CACHE_TTL=3600
+      - TRENDS_SLEEP=60
+      - MAX_ARTICLES=100
+      - DB_PATH=/app/data/cache.db
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
+    env_file:
+      - .env
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+
+  # Serviço opcional: CLI interativo
+  cli:
+    build: .
+    container_name: trending-recommender-cli
+    volumes:
+      - ./data:/app/data
+    environment:
+      - DEFAULT_COUNTRY=BR
+      - DEFAULT_LANGUAGE=pt
+      - DB_PATH=/app/data/cache.db
+    env_file:
+      - .env
+    profiles:
+      - cli
+    entrypoint: ["python", "cli.py"]
+    command: ["--help"]
